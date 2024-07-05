@@ -1,0 +1,12 @@
+<section id="articles">
+    <h2>Thought Leadership</h2>
+    <div class="articles-grid">
+        {{ range sort (where .Site.RegularPages "Type" "articles") "Params.weight" }}
+        <div class="article-card">
+            <h3><span class="emoji">{{ .Params.emoji }}</span>{{ .Title }}</h3>
+            <p>{{ .Params.description }}</p>
+            <a href="{{ .Params.link }}">Read More</a>
+        </div>
+        {{ end }}
+    </div>
+</section>

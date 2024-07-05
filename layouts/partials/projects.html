@@ -1,0 +1,19 @@
+<section id="projects">
+    <h2>Some Things I've Built</h2>
+    <div class="projects-grid">
+        {{ range sort (where .Site.RegularPages "Type" "projects") "Params.weight" }}
+        <div class="project-card">
+            <h3>
+                <span class="emoji">{{ .Params.emoji }}</span>
+                <a href="{{ .Params.github_repo }}" target="_blank" rel="noopener noreferrer">{{ .Title }}</a>
+            </h3>
+            <p>{{ .Params.description }}</p>
+            <div class="tags">
+                {{ range .Params.tags }}
+                <span class="tag">{{ . }}</span>
+                {{ end }}
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</section>

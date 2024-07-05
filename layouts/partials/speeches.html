@@ -1,0 +1,23 @@
+<section id="speeches">
+    <h2>Speeches</h2>
+    <h3>Upcoming Speeches</h3>
+    <div class="speeches-grid">
+        {{ range where (where .Site.RegularPages "Type" "speeches") "Params.type" "upcoming" }}
+        <div class="speech-card">
+            <h4>{{ .Title }}</h4>
+            <p>{{ .Params.location }}</p>
+            <p>{{ .Params.description }}</p>
+        </div>
+        {{ end }}
+    </div>
+    <h3>Past Speeches</h3>
+    <div class="speeches-grid">
+        {{ range where (where .Site.RegularPages "Type" "speeches") "Params.type" "past" }}
+        <div class="speech-card">
+            <h4>{{ .Title }}</h4>
+            <p>{{ .Params.location }}</p>
+            <p>{{ .Params.description }}</p>
+        </div>
+        {{ end }}
+    </div>
+</section>

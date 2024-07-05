@@ -1,0 +1,10 @@
+{{ define "main" }}
+<article class="article">
+    <h1>{{ .Title }}</h1>
+    <span class="emoji">{{ .Params.emoji }}</span>
+    <time>{{ .Date.Format "January 2, 2006" }}</time>
+    <div class="content">
+        {{ .Content }}
+    </div>
+</article>
+{{ end }}

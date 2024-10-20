@@ -260,3 +260,140 @@ p {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
+/* Article preview card enhancements */
+.article-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.article-card time {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    font-family: 'Fira Code', monospace;
+}
+
+.article-card a {
+    margin-top: auto;
+    align-self: flex-start;
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all var(--transition-speed) ease;
+    font-family: 'Fira Code', monospace;
+}
+
+.article-card a:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Full article page styles */
+.article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+}
+
+.article h1 {
+    font-size: 2.5rem;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.article time {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.article .content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.article-tags {
+    margin-top: 2rem;
+}
+
+.article-tags .tag {
+    display: inline-block;
+    background-color: rgba(100, 255, 218, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-family: 'Fira Code', monospace;
+    transition: color var(--transition-speed) ease;
+}
+
+.back-link:hover {
+    color: var(--heading-color);
+}
+
+/* Code block styling for articles */
+.article pre {
+    background-color: var(--secondary-color);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.article code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .article {
+        padding: 1.5rem;
+    }
+
+    .article h1 {
+        font-size: 2rem;
+    }
+
+    .article .content {
+        font-size: 1rem;
+    }
+}
+
+.article .content img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+
+/* make sure lists and auflistungen are intented and dstyle correctl */
+.article ul, .article ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}

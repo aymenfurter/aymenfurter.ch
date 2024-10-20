@@ -6,5 +6,11 @@
     <div class="content">
         {{ .Content }}
     </div>
+    <div class="article-tags">
+        {{ range .Params.tags }}
+        <span class="tag">#{{ . }}</span>
+        {{ end }}
+    </div>
+    <a href="/" class="back-link">← Back to Home</a>
 </article>
 {{ end }}

@@ -1,25 +1,20 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "Aymen Furter | Cloud Solution Architect"
-
 [params]
   author = "Aymen Furter"
   github = "https://github.com/aymenfurter"
   linkedin = "https://www.linkedin.com/in/aymenfurter/"
-
 [taxonomies]
   tag = "tags"
   category = "categories"
-
 [permalinks]
   articles = "/articles/:slug/"
-
 [outputs]
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
   taxonomy = ["HTML", "RSS"]
   term = ["HTML", "RSS"]
-
 [menu]
   [[menu.main]]
     name = "About"
@@ -35,10 +30,9 @@ title = "Aymen Furter | Cloud Solution Architect"
     weight = 3
   [[menu.main]]
     name = "Articles"
-    url = "#articles"
+    url = "/articles/"
     weight = 4
   [[menu.main]]
     name = "Speeches"
     url = "#speeches"
     weight = 5
-

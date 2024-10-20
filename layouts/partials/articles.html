@@ -4,8 +4,9 @@
         {{ range sort (where .Site.RegularPages "Type" "articles") "Params.weight" }}
         <div class="article-card">
             <h3><span class="emoji">{{ .Params.emoji }}</span>{{ .Title }}</h3>
+            <time>{{ .Date.Format "January 2, 2006" }}</time>
             <p>{{ .Params.description }}</p>
-            <a href="{{ .Params.link }}">Read More</a>
+            <a href="{{ .RelPermalink }}">Read More</a>
         </div>
         {{ end }}
     </div>

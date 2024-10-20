@@ -19,3 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const glitchText = document.getElementById('glitch-text');
+    const words = glitchText.getAttribute('data-words').split(',');
+    let currentIndex = 0;
+  
+    function changeWord() {
+      glitchText.setAttribute('data-text', words[currentIndex]);
+      glitchText.textContent = words[currentIndex];
+      currentIndex = (currentIndex + 1) % words.length;
+    }
+  
+    setInterval(changeWord, 3000); // Change word every 3 seconds
+  });

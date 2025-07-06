@@ -18,7 +18,7 @@
             <div class="article-tags">
                 <span class="tags-label">Topics:</span>
                 {{ range .Params.tags }}
-                <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}" class="article-tag">#{{ . }}</a>
+                <span class="article-tag">#{{ . }}</span>
                 {{ end }}
             </div>
         </footer>

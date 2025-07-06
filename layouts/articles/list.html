@@ -1,7 +1,7 @@
 {{ define "main" }}
 <div class="container">
     <div class="articles-header">
-        <h1>Thought Leadership</h1>
+        <h1>Things I've Written</h1>
         <p>Welcome to my collection of articles. Use the filters to navigate through topics and archives.</p>
     </div>
 
@@ -11,9 +11,14 @@
         <div id="articles-list" class="articles-list">
             {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
             <article class="article-item" data-year="{{ .Date.Format "2006" }}" data-tags='{{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }}'>
-                <h2 class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                <h2 class="article-title">
+                    <a href="{{ .RelPermalink }}">
+                        {{ with .Params.emoji }}<span class="emoji">{{ . }}</span>{{ end }}{{ .Title }}
+                    </a>
+                </h2>
                 <div class="article-meta">
                     <time>{{ .Date.Format "January 2, 2006" }}</time>
+                    <span class="reading-time">{{ .ReadingTime }} min read</span>
                     {{ with .Params.tags }}
                     <span class="separator">&middot;</span>
                     <div class="tags">
@@ -24,7 +29,12 @@
                     {{ end }}
                 </div>
                 <p>{{ .Summary | plainify | safeHTML | truncate 150 }}</p>
-                <a href="{{ .RelPermalink }}" class="read-more">Read More →</a>
+                <a href="{{ .RelPermalink }}" class="read-more">
+                    Read More 
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+                </a>
             </article>
             {{ end }}
         </div>

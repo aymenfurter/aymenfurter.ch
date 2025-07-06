@@ -1,0 +1,32 @@
+<div class="filter-bar">
+    <div class="filter-group">
+        <label for="year-filter">Year</label>
+        <div class="select-wrapper">
+            <select id="year-filter" class="filter-select">
+                <option value="all">All Years</option>
+                {{ range (where .Site.RegularPages "Type" "articles").GroupByDate "2006" }}
+                    <option value="{{ .Key }}">{{ .Key }}</option>
+                {{ end }}
+            </select>
+        </div>
+    </div>
+    <div class="filter-group">
+        <label for="tag-filter">Tag</label>
+        <div class="select-wrapper">
+            <select id="tag-filter" class="filter-select">
+                <option value="all">All Tags</option>
+                <option value="Development">Development</option>
+                <option value="AI">AI</option>
+                <option value="Azure">Azure</option>
+                <option value="Experimentation">Experimentation</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Automation">Automation</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Integration">Integration</option>
+                <option value="Python">Python</option>
+                <option value="Security">Security</option>
+            </select>
+        </div>
+    </div>
+    <button id="clear-filters" class="cta-button">Clear</button>
+</div>

@@ -1,0 +1,22 @@
+<div class="sidebar-widget">
+    <button class="filter-btn active" data-filter-type="all" data-filter-value="all">All Posts</button>
+</div>
+
+<div class="sidebar-widget">
+    <h4>Filter by Year</h4>
+    <div class="filter-group">
+        {{ range (where .Site.RegularPages "Type" "articles").GroupByDate "2006" }}
+            <button class="filter-btn" data-filter-type="year" data-filter-value="{{ .Key }}">{{ .Key }}</button>
+        {{ end }}
+    </div>
+</div>
+
+<div class="sidebar-widget">
+    <h4>Filter by Tag</h4>
+    <div class="filter-group">
+    {{ range .Site.Taxonomies.tags.ByCount }}
+        <button class="filter-btn" data-filter-type="tag" data-filter-value="{{ .Page.Title | urlize }}">{{ .Page.Title }}</button>
+    {{ end }}
+    </div>
+</div>
+</div>

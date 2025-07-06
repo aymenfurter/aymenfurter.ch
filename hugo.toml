@@ -5,6 +5,8 @@ title = "Aymen Furter | Cloud Solution Architect"
   author = "Aymen Furter"
   github = "https://github.com/aymenfurter"
   linkedin = "https://www.linkedin.com/in/aymenfurter/"
+  [params.pagination]
+    articles = 5
 [taxonomies]
   tag = "tags"
   category = "categories"

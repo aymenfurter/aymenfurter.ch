@@ -1,0 +1,17 @@
+{
+  "inputs": [
+    {
+      "id": "playwright-input",
+      "type": "promptString",
+      "description": "Input for Playwright MCP server"
+    }
+  ],
+  "servers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    }
+  }
+}

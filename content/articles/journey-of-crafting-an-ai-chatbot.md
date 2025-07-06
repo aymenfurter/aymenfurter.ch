@@ -1,12 +1,12 @@
 ---
 title: "The Journey of Crafting an AI Chatbot"
-date: 2023-08-07
+date: 2023-08-13
 draft: false
 emoji: "🤖"
-description: "Ever wondered how to build AI chatbots and launch new revisions of prompt templates with confidence?"
-tags: ["AI", "Chatbots", "Vector Search", "Azure Cognitive Search", "RAG"]
+description: "I often study a lot of material to understand the details of Azure services. Interestingly, I've found that sometimes the most insightful resources aren't always in written form."
+tags: ["AI", "Azure", "Development"]
+categories: ["AI", "Azure", "Development"]
 weight: 50
-link: https://www.linkedin.com/pulse/journey-crafting-ai-chatbot-aymen-furter/
 ---
 
 ![The Journey of Crafting an AI Chatbot](/images/crafting-ai-chatbot-header.png)
@@ -15,7 +15,7 @@ I often study a lot of material to understand the details of Azure services. Int
 
 ![AI Chatbot Concept](/images/ai-chatbot-concept.png)
 
-So, it got me thinking - why not design a chatbot that can simplify this search process for me?
+So, it got me thinking — why not design a chatbot that can simplify this search process for me?
 
 Let's delve into this concept. We imagine a chatbot designed specifically to help us find relevant YouTube videos based on our questions or interests. For this to work, the chatbot must have access to my own data. Specifically, I'd like it to utilize transcriptions from YouTube content.
 
@@ -25,9 +25,9 @@ Prompts are not written in code but in natural language. This may appear advanta
 
 Our first step should always be to ensure that the LLM can carry out the desired activity. At this stage, we experiment with various prompt designs, proving that it's feasible. Often, we also want to confirm not only its feasibility but also its cost-effectiveness and acceptable user experience in terms of inference speed.
 
-During this early experimentation stage, a recently introduced tool named [Prompt flow](https://learn.microsoft.com/en-us/azure/machine-learning/prompt-flow/overview-what-is-prompt-flow?view=azureml-api-2) proves to be useful. It is a component of the Machine Learning Studio. When we begin to construct and compare different prompts, Prompt flow can be used to create various prompt variants. Since Prompt flow supports the use of Python code snippets, we can also use orchestration libraries such as Langchain. 
+During this early experimentation stage, a recently introduced tool named [Prompt flow](https://learn.microsoft.com/en-us/azure/machine-learning/prompt-flow/overview-what-is-prompt-flow?view=azureml-api-2) proves to be useful. It is a component of the Machine Learning Studio. When we begin to construct and compare different prompts, Prompt flow can be used to create various prompt variants. Since Prompt flow supports the use of Python code snippets, we can also use orchestration libraries such as Langchain.
 
-### Diving Deep into Our Specific Scenario
+## Diving Deep into Our Specific Scenario
 
 Let's examine our scenario. We need to prove that our LLM can extract information and accurately reference it from a list of YouTube transcripts. This is a common pattern known as Retrieval Augmented Generation (RAG). Here is the prompt we will construct:
 
@@ -268,6 +268,6 @@ Creating a copilot-style chatbot is not just about engineering its responses and
 
 Here is an example interaction with the "Upskiller" chatbot:
 
-![Upskiller Chatbot Interaction](/images/upskiller-chatbot-interaction.png)
+![Playback Interface](/images/playback-interface.png)
 
 The source code is of course available on [GitHub](https://github.com/aymenfurter/upskiller).

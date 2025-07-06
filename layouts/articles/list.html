@@ -1,0 +1,36 @@
+{{ define "main" }}
+<div class="container">
+    <div class="articles-header">
+        <h1>Thought Leadership</h1>
+        <p>Welcome to my collection of articles. Use the filters to navigate through topics and archives.</p>
+    </div>
+
+    {{ partial "articles_filter_bar.html" . }}
+
+    <main class="articles-main-content">
+        <div id="articles-list" class="articles-list">
+            {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
+            <article class="article-item" data-year="{{ .Date.Format "2006" }}" data-tags='{{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }}'>
+                <h2 class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                <div class="article-meta">
+                    <time>{{ .Date.Format "January 2, 2006" }}</time>
+                    {{ with .Params.tags }}
+                    <span class="separator">&middot;</span>
+                    <div class="tags">
+                        {{ range . }}
+                        <span class="tag-item">#{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                </div>
+                <p>{{ .Summary | plainify | safeHTML | truncate 150 }}</p>
+                <a href="{{ .RelPermalink }}" class="read-more">Read More →</a>
+            </article>
+            {{ end }}
+        </div>
+        <div id="no-results" class="no-results-message" style="display: none;">
+            <p>No articles match your current filters. Try clearing them to see all posts.</p>
+        </div>
+    </main>
+</div>
+{{ end }}

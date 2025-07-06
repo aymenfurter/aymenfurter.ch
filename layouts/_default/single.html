@@ -1,16 +1,53 @@
 {{ define "main" }}
-<article class="article">
-    <h1>{{ .Title }}</h1>
-    <span class="emoji">{{ .Params.emoji }}</span>
-    <time>{{ .Date.Format "January 2, 2006" }}</time>
-    <div class="content">
-        {{ .Content }}
-    </div>
-    <div class="article-tags">
-        {{ range .Params.tags }}
-        <span class="tag">#{{ . }}</span>
+<div class="article-container">
+    <article class="article-detail">
+        <div class="article-header">
+            <h1 class="article-title">{{ .Title }}</h1>
+            <div class="article-metadata">
+                <time class="article-date">{{ .Date.Format "January 2, 2006" }}</time>
+                <span class="article-reading-time">{{ .ReadingTime }} min read</span>
+            </div>
+        </div>
+
+        <div class="article-content">
+            {{ .Content }}
+        </div>
+
+        {{ if .Params.tags }}
+        <footer class="article-footer">
+            <div class="article-tags">
+                <span class="tags-label">Topics:</span>
+                {{ range .Params.tags }}
+                <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}" class="article-tag">#{{ . }}</a>
+                {{ end }}
+            </div>
+        </footer>
         {{ end }}
-    </div>
-    <a href="/" class="back-link">← Back to Home</a>
-</article>
+
+        {{ if eq .Type "articles" }}
+        <nav class="article-navigation">
+            <div class="nav-section">
+                {{ with .NextInSection }}
+                <a href="{{ .RelPermalink }}" class="nav-link nav-prev">
+                    <span class="nav-direction">← Previous</span>
+                    <span class="nav-title">{{ .Title }}</span>
+                </a>
+                {{ end }}
+            </div>
+            <div class="nav-section">
+                {{ with .PrevInSection }}
+                <a href="{{ .RelPermalink }}" class="nav-link nav-next">
+                    <span class="nav-direction">Next →</span>
+                    <span class="nav-title">{{ .Title }}</span>
+                </a>
+                {{ end }}
+            </div>
+        </nav>
+        {{ end }}
+
+        <div class="article-actions">
+            <a href="/articles" class="back-to-articles">← Back to Articles</a>
+        </div>
+    </article>
+</div>
 {{ end }}

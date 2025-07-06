@@ -1,0 +1,39 @@
+{{ define "main" }}
+<div class="container">
+    <div class="articles-container">
+        <aside class="articles-sidebar">
+            {{ partial "articles_sidebar.html" . }}
+        </aside>
+        <main class="articles-main-content">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <div class="articles-list">
+                {{ $pages := .Pages.ByDate.Reverse }}
+                {{ if gt (len $pages) 0 }}
+                    {{ $paginator := .Paginate $pages }}
+                    {{ range $paginator.Pages }}
+                    <article class="article-item">
+                        <h2 class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                        <div class="article-meta">
+                            <time>{{ .Date.Format "January 2, 2006" }}</time>
+                            {{ with .Params.tags }}
+                            <span class="separator">&middot;</span>
+                            <div class="tags">
+                                {{ range . }}
+                                <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}" class="tag">#{{ . }}</a>
+                                {{ end }}
+                            </div>
+                            {{ end }}
+                        </div>
+                        <p>{{ .Summary | plainify | safeHTML | truncate 150 }}</p>
+                        <a href="{{ .RelPermalink }}" class="read-more">Read More →</a>
+                    </article>
+                    {{ end }}
+                    {{ partial "pagination.html" . }}
+                {{ else }}
+                    <p>There are no articles associated with this term yet. Please check back later!</p>
+                {{ end }}
+            </div>
+        </main>
+    </div>
+</div>
+{{ end }}

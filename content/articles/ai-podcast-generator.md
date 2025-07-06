@@ -4,7 +4,7 @@ date: 2024-10-19
 draft: false
 emoji: "🎙️"
 description: "Exploring the creation of an AI-powered, real-time interactive podcast generator using OpenAI's Real-Time Voice API and Azure services."
-tags: ["AI", "Podcast", "GPT-4", "Real-Time API", "Azure OpenAI", "Text-to-Speech"]
+tags: ["AI", "Azure", "Experimentation"]
 weight: 10
 link: https://www.linkedin.com/pulse/building-interactive-text-to-podcast-experience-gpt-4o-aymen-furter
 ---

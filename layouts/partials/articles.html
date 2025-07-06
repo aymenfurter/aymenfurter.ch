@@ -1,7 +1,7 @@
 <section id="articles">
     <h2>Thought Leadership</h2>
     <div class="articles-grid">
-        {{ range sort (where .Site.RegularPages "Type" "articles") "Params.weight" }}
+        {{ range first 3 (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
         <div class="article-card">
             <h3><span class="emoji">{{ .Params.emoji }}</span>{{ .Title }}</h3>
             <time>{{ .Date.Format "January 2, 2006" }}</time>
@@ -9,5 +9,8 @@
             <a href="{{ .RelPermalink }}">Read More</a>
         </div>
         {{ end }}
+    </div>
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/articles/" class="cta-button">View All Articles</a>
     </div>
 </section>

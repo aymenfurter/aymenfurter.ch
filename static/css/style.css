@@ -4,6 +4,45 @@
     --card-background: rgba(17, 34, 64, 0.7); --hover-color: #233554;
     --transition-speed: 0.3s;
 }
+
+/* Floating image styles for article content */
+.article-content figure.float-right {
+    float: right !important;
+    margin: 0 0 1.5rem 2rem !important;
+    max-width: 420px !important;
+    width: 45% !important;
+}
+
+.article-content figure.float-right img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.article-content figure.float-right img:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.article-content figure.float-right figcaption {
+    font-size: 0.85rem !important;
+    color: var(--text-color) !important;
+    font-style: italic !important;
+    margin-top: 0.5rem !important;
+    text-align: center !important;
+}
+
+/* Clear floats after sections in articles */
+.article-content section::after,
+.article-content::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: 'Poppins', sans-serif; line-height: 1.6; color: var(--text-color);
@@ -619,40 +658,11 @@ p {
         font-size: 2.2rem;
     }
 
-    .article-emoji {
-        font-size: 3rem;
-    }
-
-    .article-content {
-        padding: 2rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    .article-content h2 {
-        font-size: 1.5rem;
-    }
-
-    .article-footer,
-    .article-actions {
-        padding: 1.5rem;
-    }
-
-    .article-navigation {
-        grid-template-columns: 1fr;
-    }
-
-    .nav-next {
-        text-align: left;
-    }
-
-    .article-metadata {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .tags-label {
-        width: 100%;
-        margin-bottom: 0.5rem;
+    .article-content figure.float-right {
+        float: none !important;
+        margin: 1.5rem auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
     }
 }
 

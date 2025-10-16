@@ -60,17 +60,19 @@ In GitHub Copilot, users define which **Model Context Protocol (MCP)** servers t
 
 ```json
 {
-  "mcp_servers": {
+  "mcpServers": {
     "github": {
-      "endpoint": "https://example-gateway/tools/github",
-      "allowed_tools": ["list_pull_requests", "create_branch"],
-      "blocked_tools": ["merge_pull_request", "delete_repository"]
+      "url": "https://example-gateway/tools/github",
+      "tools": [
+        "list_pull_requests",
+        "create_branch"
+      ]
     }
   }
 }
 ```
 
-By declaring allowed and blocked tools explicitly, users give the agent clear operational limits — reducing risk and uncertainty while retaining flexibility.
+By declaring tools explicitly, users give the agent clear operational limits — reducing risk and uncertainty while retaining flexibility.
 
 ### 2. Create micro-environments for different workflows (GitHub Copilot)
 
@@ -78,11 +80,21 @@ GitHub Copilot also allows developers to define **custom chat modes**, micro-env
 
 ```yaml
 ---
-description: "Plan changes without editing files"
-model: "auto"
-tools:
-  - vscode.workspaceSearch
-  - copilot.readOnlyContext
+description: "Generate an implementation plan for new features or refactoring existing code."
+tools: ['fetch', 'githubRepo', 'search', 'usages']
+model: Claude Sonnet 4
+---
+
+# Planning mode instructions
+
+You are in planning mode. Your task is to generate an implementation plan for a new feature or for refactoring existing code.  
+Do not make any code edits — only output a plan.  
+
+The plan should include:
+- Overview  
+- Requirements  
+- Implementation Steps  
+- Testing
 ---
 ```
 
@@ -90,19 +102,14 @@ When this mode is active, Copilot can explore the workspace, identify affected f
 
 ### 3. Control live web access (Azure AI Agent Service)
 
-In **Azure AI Agent Service**, environment design extends to web and data access. One common example is integrating **Bing Custom Search** with a strict allow list:
+In Azure AI Agent Service, you can restrict what online sources an agent can read from by using the Bing Custom Search grounding tool.
+When setting it up, you define a list of websites that are allowed for retrieval.
+For example, you might only permit content from trusted Microsoft and GitHub domains such as:
+	•	learn.microsoft.com
+	•	github.blog
+	•	code.visualstudio.com
 
-```json
-{
-  "allowed_domains": [
-    "https://learn.microsoft.com",
-    "https://github.blog",
-    "https://code.visualstudio.com"
-  ]
-}
-```
-
-This enables agents to retrieve current, relevant information safely within curated boundaries. It reduces hallucinations, limits data risk, and ensures reproducible outputs.
+This configuration ensures that the agent can access only approved documentation sites, which reduces the risk of inaccurate or unsafe data being pulled from the wider web. It also helps make results reproducible since every search stays within a curated set of sources.
 
 ## Summary
 

@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./public/
-          server-dir: ./aymenfurter.ch/
+          server-dir: ./aymenfurter/
           protocol: ftps
           port: 21
           dangerous-clean-slate: false
@@ -60,12 +60,12 @@ jobs:
           set ftp:ssl-protect-data yes
           open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER
           
-          # Check if aymenfurter.ch directory exists and rename it
-          cls -1 | grep -q "^aymenfurter.ch$" && mv aymenfurter.ch aymenfurter.ch_$TIMESTAMP || echo "Directory does not exist yet"
+          # Check if aymenfurter directory exists and rename it
+          cls -1 | grep -q "^aymenfurter$" && mv aymenfurter aymenfurter_$TIMESTAMP || echo "Directory does not exist yet"
           
           # Create new directory and upload
-          mkdir -p aymenfurter.ch
-          mirror -R --verbose --delete ./public/ ./aymenfurter.ch/
+          mkdir -p aymenfurter
+          mirror -R --verbose --delete ./public/ ./aymenfurter/
           
           bye
           EOF
@@ -79,5 +79,5 @@ jobs:
       - name: Deployment Summary
         run: |
           echo "✅ Hugo site built successfully"
-          echo "✅ Previous directory backed up as: aymenfurter.ch_${{ steps.timestamp.outputs.datetime }}"
-          echo "✅ New site deployed to: aymenfurter.ch/"
+          echo "✅ Previous directory backed up as: aymenfurter_${{ steps.timestamp.outputs.datetime }}"
+          echo "✅ New site deployed to: aymenfurter/"

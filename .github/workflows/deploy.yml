@@ -26,12 +26,8 @@ jobs:
       - name: Build site
         run: hugo --minify
 
-      - name: Get current timestamp
-        id: timestamp
-        run: echo "datetime=$(date +%Y%m%d_%H%M%S%3N)" >> $GITHUB_OUTPUT
-
       - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
@@ -40,44 +36,11 @@ jobs:
           server-dir: ./aymenfurter/
           protocol: ftps
           port: 21
-          dangerous-clean-slate: false
-          
-      - name: Backup and Deploy via SFTP/FTP Commands
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          TIMESTAMP: ${{ steps.timestamp.outputs.datetime }}
-        run: |
-          # Install lftp for advanced FTP operations
-          sudo apt-get update
-          sudo apt-get install -y lftp
-          
-          # Create lftp script for backup and deployment
-          cat << 'EOF' > deploy.lftp
-          set ssl:verify-certificate no
-          set ftp:ssl-allow yes
-          set ftp:ssl-protect-data yes
-          open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER
-          
-          # Check if aymenfurter directory exists and rename it
-          cls -1 | grep -q "^aymenfurter$" && mv aymenfurter aymenfurter_$TIMESTAMP || echo "Directory does not exist yet"
-          
-          # Create new directory and upload
-          mkdir -p aymenfurter
-          mirror -R --verbose --delete ./public/ ./aymenfurter/
-          
-          bye
-          EOF
-          
-          # Execute lftp script
-          lftp -f deploy.lftp
-          
-          # Clean up
-          rm deploy.lftp
-
-      - name: Deployment Summary
-        run: |
-          echo "✅ Hugo site built successfully"
-          echo "✅ Previous directory backed up as: aymenfurter_${{ steps.timestamp.outputs.datetime }}"
-          echo "✅ New site deployed to: aymenfurter/"
+          security: loose            # ignore self-signed certs
+          timeout: 60000             # allow slower transfers
+          log-level: verbose         # detailed logs
+          dangerous-clean-slate: true # delete everything before upload
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**

@@ -1,0 +1,83 @@
+name: Build and Deploy to FTP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Build site
+        run: hugo --minify
+
+      - name: Get current timestamp
+        id: timestamp
+        run: echo "datetime=$(date +%Y%m%d_%H%M%S%3N)" >> $GITHUB_OUTPUT
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public/
+          server-dir: ./aymenfurter.ch/
+          protocol: ftps
+          port: 21
+          dangerous-clean-slate: false
+          
+      - name: Backup and Deploy via SFTP/FTP Commands
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          TIMESTAMP: ${{ steps.timestamp.outputs.datetime }}
+        run: |
+          # Install lftp for advanced FTP operations
+          sudo apt-get update
+          sudo apt-get install -y lftp
+          
+          # Create lftp script for backup and deployment
+          cat << 'EOF' > deploy.lftp
+          set ssl:verify-certificate no
+          set ftp:ssl-allow yes
+          set ftp:ssl-protect-data yes
+          open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER
+          
+          # Check if aymenfurter.ch directory exists and rename it
+          cls -1 | grep -q "^aymenfurter.ch$" && mv aymenfurter.ch aymenfurter.ch_$TIMESTAMP || echo "Directory does not exist yet"
+          
+          # Create new directory and upload
+          mkdir -p aymenfurter.ch
+          mirror -R --verbose --delete ./public/ ./aymenfurter.ch/
+          
+          bye
+          EOF
+          
+          # Execute lftp script
+          lftp -f deploy.lftp
+          
+          # Clean up
+          rm deploy.lftp
+
+      - name: Deployment Summary
+        run: |
+          echo "✅ Hugo site built successfully"
+          echo "✅ Previous directory backed up as: aymenfurter.ch_${{ steps.timestamp.outputs.datetime }}"
+          echo "✅ New site deployed to: aymenfurter.ch/"

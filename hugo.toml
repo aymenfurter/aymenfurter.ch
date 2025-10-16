@@ -1,6 +1,6 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
-title = "Aymen Furter | Cloud Solution Architect"
+title = "Aymen Furter | Solution Engineer"
 [params]
   author = "Aymen Furter"
   github = "https://github.com/aymenfurter"
@@ -38,3 +38,7 @@ title = "Aymen Furter | Cloud Solution Architect"
     name = "Speeches"
     url = "#speeches"
     weight = 5
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

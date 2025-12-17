@@ -37,3 +37,5 @@ Temporary Items
 hugo_server.log
 
 .vscode
+
+sync-agent

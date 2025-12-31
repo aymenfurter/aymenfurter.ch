@@ -11,19 +11,22 @@
         <div id="articles-list" class="articles-list">
             {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
             <article class="article-item" data-year="{{ .Date.Format "2006" }}" data-tags='{{ with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }}'>
-                <h2 class="article-title">
-                    <a href="{{ .RelPermalink }}">
-                        {{ with .Params.emoji }}<span class="emoji">{{ . }}</span>{{ end }}{{ .Title }}
-                    </a>
-                </h2>
-                <div class="article-meta">
-                    <time>{{ .Date.Format "January 2, 2006" }}</time>
-                    <span class="reading-time">{{ .ReadingTime }} min read</span>
+                <div class="article-header">
+                    <div class="article-info">
+                        <h2 class="article-title">
+                            <a href="{{ .RelPermalink }}">
+                                {{ with .Params.emoji }}<span class="emoji">{{ . }}</span>{{ end }}{{ .Title }}
+                            </a>
+                        </h2>
+                        <div class="article-meta">
+                            <time>{{ .Date.Format "January 2, 2006" }}</time>
+                            <span class="reading-time">{{ .ReadingTime }} min read</span>
+                        </div>
+                    </div>
                     {{ with .Params.tags }}
-                    <span class="separator">&middot;</span>
-                    <div class="tags">
-                        {{ range . }}
-                        <span class="tag-item">#{{ . }}</span>
+                    <div class="article-tags-right">
+                        {{ range first 3 . }}
+                        <span class="tag-pill">#{{ . }}</span>
                         {{ end }}
                     </div>
                     {{ end }}

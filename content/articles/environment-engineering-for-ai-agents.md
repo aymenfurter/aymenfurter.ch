@@ -5,6 +5,7 @@ draft: false
 emoji: "🤖"
 github_repo: ""
 description: "A practical guide to environment engineering - platform engineering but for AI agents. Learn how to design robust, predictable, and safe environments for AI agents."
+tags: ["AI Agents", "Platform Engineering", "Azure"]
 weight: 100
 ---
 

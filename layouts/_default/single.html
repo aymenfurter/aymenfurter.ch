@@ -13,41 +13,30 @@
             {{ .Content }}
         </div>
 
-        {{ if .Params.tags }}
         <footer class="article-footer">
+            {{ if .Params.tags }}
             <div class="article-tags">
-                <span class="tags-label">Topics:</span>
                 {{ range .Params.tags }}
                 <span class="article-tag">#{{ . }}</span>
                 {{ end }}
             </div>
+            {{ end }}
+            
+            <div class="article-nav-bar">
+                <a href="/" class="nav-home">← Home</a>
+                
+                {{ if eq .Type "articles" }}
+                <div class="nav-articles">
+                    {{ with .NextInSection }}
+                    <a href="{{ .RelPermalink }}" class="nav-link" title="{{ .Title }}">← Older</a>
+                    {{ end }}
+                    {{ with .PrevInSection }}
+                    <a href="{{ .RelPermalink }}" class="nav-link" title="{{ .Title }}">Newer →</a>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
         </footer>
-        {{ end }}
-
-        {{ if eq .Type "articles" }}
-        <nav class="article-navigation">
-            <div class="nav-section">
-                {{ with .NextInSection }}
-                <a href="{{ .RelPermalink }}" class="nav-link nav-prev">
-                    <span class="nav-direction">← Previous</span>
-                    <span class="nav-title">{{ .Title }}</span>
-                </a>
-                {{ end }}
-            </div>
-            <div class="nav-section">
-                {{ with .PrevInSection }}
-                <a href="{{ .RelPermalink }}" class="nav-link nav-next">
-                    <span class="nav-direction">Next →</span>
-                    <span class="nav-title">{{ .Title }}</span>
-                </a>
-                {{ end }}
-            </div>
-        </nav>
-        {{ end }}
-
-        <div class="article-actions">
-            <a href="/articles" class="back-to-articles">← Back to Articles</a>
-        </div>
     </article>
 </div>
 {{ end }}

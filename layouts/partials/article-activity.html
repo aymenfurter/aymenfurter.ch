@@ -1,0 +1,97 @@
+<section id="articles">
+    <div class="section-header">
+        <h2>Recent Writing</h2>
+        <p class="section-subtitle">Thoughts on AI, cloud architecture, and building intelligent systems</p>
+    </div>
+    
+    <div class="writing-container">
+        <div class="writing-filters">
+            <button class="filter-btn active" data-filter="recent">Recent</button>
+            {{ $years := slice }}
+            {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
+                {{ $year := .Date.Format "2006" }}
+                {{ if not (in $years $year) }}
+                    {{ $years = $years | append $year }}
+                {{ end }}
+            {{ end }}
+            {{ range $index, $year := $years }}
+            <button class="filter-btn{{ if gt $index 2 }} hide-mobile{{ end }}" data-filter="{{ $year }}">{{ $year }}</button>
+            {{ end }}
+            <button class="filter-btn show-mobile-only" data-filter="all">More</button>
+        </div>
+        
+        <div class="activity-graph">
+            <div class="activity-months" id="activity-months">
+                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
+            
+            {{/* Build article date map */}}
+            {{ $articleDates := dict }}
+            {{ range (where .Site.RegularPages "Type" "articles") }}
+                {{ $dateKey := .Date.Format "2006-01-02" }}
+                {{ $articleDates = merge $articleDates (dict $dateKey (dict "title" .Title "url" .RelPermalink "year" (.Date.Format "2006"))) }}
+            {{ end }}
+            
+            {{/* Get all unique years */}}
+            {{ $allYears := slice }}
+            {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
+                {{ $y := .Date.Format "2006" }}
+                {{ if not (in $allYears $y) }}
+                    {{ $allYears = $allYears | append $y }}
+                {{ end }}
+            {{ end }}
+            
+            {{/* Generate a grid for each year */}}
+            {{ $currentYear := now.Format "2006" }}
+            {{ range $year := $allYears }}
+            <div class="activity-grid{{ if ne $year $currentYear }} hidden{{ end }}" id="activity-grid-{{ $year }}" data-year="{{ $year }}">
+                {{ $startDate := time (printf "%s-01-01" $year) }}
+                {{ $startWeekday := int $startDate.Weekday }}
+                {{ $isLeapYear := (time (printf "%s-12-31" $year)).YearDay }}
+                
+                {{/* Generate all 53 weeks */}}
+                {{ range $week := seq 0 52 }}
+                    <div class="activity-week">
+                        {{ range $day := seq 0 6 }}
+                            {{ $totalDays := add (mul $week 7) $day }}
+                            {{ $dayOffset := sub $totalDays $startWeekday }}
+                            {{ if and (ge $dayOffset 0) (lt $dayOffset $isLeapYear) }}
+                                {{ $date := $startDate.AddDate 0 0 (int $dayOffset) }}
+                                {{ $dateKey := $date.Format "2006-01-02" }}
+                                {{ $hasArticle := isset $articleDates $dateKey }}
+                                {{ $article := index $articleDates $dateKey }}
+                                <div class="activity-day {{ if $hasArticle }}has-article{{ end }}" 
+                                     data-date="{{ $dateKey }}"
+                                     data-year="{{ $date.Format "2006" }}"
+                                     {{ if $hasArticle }}data-title="{{ $article.title }}" data-url="{{ $article.url }}"{{ end }}
+                                     title="{{ $date.Format "Jan 2, 2006" }}{{ if $hasArticle }}: {{ $article.title }}{{ end }}">
+                                </div>
+                            {{ else }}
+                                <div class="activity-day empty"></div>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                {{ end }}
+            </div>
+            {{ end }}
+            
+            <div class="activity-legend">
+                <span class="legend-label">Less</span>
+                <div class="legend-scale">
+                    <div class="legend-item level-0"></div>
+                    <div class="legend-item level-1"></div>
+                </div>
+                <span class="legend-label">More</span>
+            </div>
+        </div>
+        
+        <div class="writing-list" id="writing-list">
+            {{ range (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
+            <a href="{{ .RelPermalink }}" class="writing-item" data-year="{{ .Date.Format "2006" }}" data-date="{{ .Date.Format "2006-01-02" }}">
+                <span class="writing-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                <span class="writing-title">{{ .Title }}</span>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+</section>

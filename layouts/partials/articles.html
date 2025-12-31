@@ -1,16 +1,36 @@
 <section id="articles">
-    <h2>Things I've Written</h2>
-    <div class="articles-grid">
-        {{ range first 3 (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
-        <div class="article-card">
-            <h3><span class="emoji">{{ .Params.emoji }}</span>{{ .Title }}</h3>
-            <time>{{ .Date.Format "January 2, 2006" }}</time>
-            <p>{{ .Params.description }}</p>
-            <a href="{{ .RelPermalink }}">Read More</a>
-        </div>
+    <div class="section-header">
+        <h2>Recent Writing</h2>
+        <p class="section-subtitle">Thoughts on AI, cloud architecture, and building intelligent systems</p>
+    </div>
+    <div class="articles-feed">
+        {{ range first 4 (where .Site.RegularPages "Type" "articles").ByDate.Reverse }}
+        <article class="article-entry">
+            <div class="article-date-badge">
+                <span class="date-month">{{ .Date.Format "Jan" }}</span>
+                <span class="date-day">{{ .Date.Format "02" }}</span>
+            </div>
+            <div class="article-content-preview">
+                <a href="{{ .RelPermalink }}" class="article-link">
+                    <h3>{{ .Title }}</h3>
+                    <p>{{ .Params.description }}</p>
+                    <span class="read-indicator">Read article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                </a>
+            </div>
+            {{ with .Params.tags }}
+            <div class="article-tags-right">
+                {{ range first 3 . }}
+                <span class="tag-pill">#{{ . }}</span>
+                {{ end }}
+            </div>
+            {{ end }}
+        </article>
         {{ end }}
     </div>
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="/articles/" class="cta-button">View All Articles</a>
+    <div class="section-footer">
+        <a href="/articles/" class="view-all-link">
+            View all articles
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
     </div>
 </section>

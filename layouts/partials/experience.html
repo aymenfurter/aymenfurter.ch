@@ -1,17 +1,29 @@
 <section id="experience">
     <div class="section-header">
-        <h2>Experience</h2>
+        <h2>Professional Experience</h2>
         <p class="section-subtitle">My professional journey in technology</p>
     </div>
     
-    <div class="experience-layout">
+    {{/* Define career data */}}
+    {{ $careers := slice
+        (dict "company" "boxalino" "name" "Boxalino" "start" "2007-05" "end" "2014-12")
+        (dict "company" "prodyna" "name" "PRODYNA" "start" "2015-01" "end" "2017-05")
+        (dict "company" "zurich" "name" "Zurich" "start" "2017-06" "end" "2022-08")
+        (dict "company" "microsoft" "name" "Microsoft" "start" "2022-09" "end" "present")
+    }}
+    
+    {{ $startYear := 2007 }}
+    {{ $currentYear := int (now.Format "2006") }}
+    {{ $currentMonth := int (now.Format "1") }}
+    
+    {{ $yearCount := add (sub $currentYear $startYear) 1 }}
+    <div class="experience-layout" style="--year-count: {{ $yearCount }};">
         <!-- Company Selector (visible on mobile) -->
         <div class="company-selector-mobile">
             <div class="career-legend">
-                <div class="legend-item" data-company="boxalino"><span class="legend-box boxalino"></span>Boxalino</div>
-                <div class="legend-item" data-company="prodyna"><span class="legend-box prodyna"></span>PRODYNA</div>
-                <div class="legend-item" data-company="zurich"><span class="legend-box zurich"></span>Zurich</div>
-                <div class="legend-item active" data-company="microsoft"><span class="legend-box microsoft"></span>Microsoft</div>
+                {{ range $careers }}
+                <div class="legend-item{{ if eq .company "microsoft" }} active{{ end }}" data-company="{{ .company }}"><span class="legend-box {{ .company }}"></span>{{ .name }}</div>
+                {{ end }}
             </div>
         </div>
         
@@ -20,44 +32,50 @@
             <div class="career-timeline">
                 <div class="timeline-header">
                     <span class="month-spacer"></span>
-                    <span>'07</span><span>'08</span><span>'09</span><span>'10</span><span>'11</span><span>'12</span><span>'13</span><span>'14</span><span>'15</span><span>'16</span><span>'17</span><span>'18</span><span>'19</span><span>'20</span><span>'21</span><span>'22</span><span>'23</span><span>'24</span><span>'25</span>
+                    {{ range $year := seq $startYear $currentYear }}
+                    <span>'{{ printf "%02d" (mod $year 100) }}</span>
+                    {{ end }}
                 </div>
                 <div class="career-grid-wrapper">
                     <div class="month-labels">
                         <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
                     </div>
                     <div class="career-grid">
-                        <!-- Row 1 (Jan) -->
-                        <div class="career-month empty"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 2 (Feb) -->
-                        <div class="career-month empty"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 3 (Mar) -->
-                        <div class="career-month empty"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 4 (Apr) -->
-                        <div class="career-month empty"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 5 (May) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 6 (Jun) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 7 (Jul) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 8 (Aug) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 9 (Sep) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 10 (Oct) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 11 (Nov) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
-                        <!-- Row 12 (Dec) -->
-                        <div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month boxalino" data-company="boxalino"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month prodyna" data-company="prodyna"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month zurich" data-company="zurich"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div><div class="career-month microsoft" data-company="microsoft"></div>
+                        {{/* Generate 12 rows (one for each month) */}}
+                        {{ range $monthIdx := seq 1 12 }}
+                        <!-- Row {{ $monthIdx }} ({{ index (slice "" "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec") $monthIdx }}) -->
+                        {{ range $year := seq $startYear $currentYear }}
+                            {{/* Check if this month is in the future */}}
+                            {{ $isFuture := or (gt $year $currentYear) (and (eq $year $currentYear) (gt $monthIdx $currentMonth)) }}
+                            {{/* Find which company was active this month */}}
+                            {{ $activeCompany := "" }}
+                            {{ if not $isFuture }}
+                                {{ $checkDate := printf "%d-%02d" $year $monthIdx }}
+                                {{ range $careers }}
+                                    {{ $startDate := .start }}
+                                    {{ $endDate := .end }}
+                                    {{ $isAfterStart := ge $checkDate $startDate }}
+                                    {{ $isBeforeEnd := or (eq $endDate "present") (le $checkDate $endDate) }}
+                                    {{ if and $isAfterStart $isBeforeEnd }}
+                                        {{ $activeCompany = .company }}
+                                    {{ end }}
+                                {{ end }}
+                            {{ end }}
+                            {{ if $isFuture }}
+                            <div class="career-month future"></div>
+                            {{ else if $activeCompany }}
+                            <div class="career-month {{ $activeCompany }}" data-company="{{ $activeCompany }}"></div>
+                            {{ else }}
+                            <div class="career-month empty"></div>
+                            {{ end }}
+                        {{ end }}
+                        {{ end }}
                     </div>
                 </div>
                 <div class="career-legend">
-                    <div class="legend-item" data-company="boxalino"><span class="legend-box boxalino"></span>Boxalino</div>
-                    <div class="legend-item" data-company="prodyna"><span class="legend-box prodyna"></span>PRODYNA</div>
-                    <div class="legend-item" data-company="zurich"><span class="legend-box zurich"></span>Zurich</div>
-                    <div class="legend-item active" data-company="microsoft"><span class="legend-box microsoft"></span>Microsoft</div>
+                    {{ range $careers }}
+                    <div class="legend-item{{ if eq .company "microsoft" }} active{{ end }}" data-company="{{ .company }}"><span class="legend-box {{ .company }}"></span>{{ .name }}</div>
+                    {{ end }}
                 </div>
             </div>
         </div>

@@ -139,7 +139,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const writingItems = document.querySelectorAll('.writing-item');
     const activityGrids = document.querySelectorAll('.activity-grid');
+    const activityMonthsYear = document.getElementById('activity-months');
+    const activityMonthsRecent = document.getElementById('activity-months-recent');
     const currentYear = new Date().getFullYear().toString();
+    
+    // Calculate date 12 months ago for "recent" filter
+    const now = new Date();
+    const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1);
     
     // LOAD GITHUB STARS
     const starLinks = document.querySelectorAll('.github-stars-link[data-repo]');
@@ -166,8 +172,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Filter writing list items
         writingItems.forEach((item, index) => {
             if (filter === 'recent') {
-                // Show only first 3 items for "Recent"
-                item.classList.toggle('hidden', index >= 3);
+                // Show items from the last 12 months
+                const itemDate = new Date(item.dataset.date);
+                item.classList.toggle('hidden', itemDate < twelveMonthsAgo);
             } else if (filter === 'all') {
                 // Show all items
                 item.classList.remove('hidden');
@@ -177,15 +184,27 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         
-        // Switch activity grid to the target year (hide all for "all" filter)
-        const targetYear = (filter === 'recent') ? currentYear : filter;
+        // Switch activity grid - use "recent" grid for recent filter, otherwise use year grid
         activityGrids.forEach((grid) => {
             if (filter === 'all') {
                 grid.classList.add('hidden');
+            } else if (filter === 'recent') {
+                grid.classList.toggle('hidden', grid.dataset.year !== 'recent');
             } else {
-                grid.classList.toggle('hidden', grid.dataset.year !== targetYear);
+                grid.classList.toggle('hidden', grid.dataset.year !== filter);
             }
         });
+        
+        // Toggle month labels between recent (rolling 12 months) and year (Jan-Dec)
+        if (activityMonthsYear && activityMonthsRecent) {
+            if (filter === 'recent') {
+                activityMonthsYear.style.display = 'none';
+                activityMonthsRecent.style.display = 'flex';
+            } else {
+                activityMonthsYear.style.display = 'flex';
+                activityMonthsRecent.style.display = 'none';
+            }
+        }
     };
     
     // Apply initial filter (recent - shows current year graph, 3 latest entries)
@@ -206,13 +225,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     
-    // Activity day click to navigate
-    document.querySelectorAll('.activity-day').forEach(day => {
+    // Activity day click to navigate and tooltip
+    const activityTooltip = document.createElement('div');
+    activityTooltip.className = 'activity-tooltip';
+    activityTooltip.style.cssText = 'position:fixed;background:var(--primary-color);border:1px solid var(--accent-color);color:var(--heading-color);padding:8px 12px;border-radius:6px;font-size:12px;white-space:nowrap;pointer-events:none;z-index:9999;opacity:0;visibility:hidden;box-shadow:0 4px 16px rgba(2,12,27,0.4);transition:opacity 0.15s;';
+    document.body.appendChild(activityTooltip);
+    
+    document.querySelectorAll('.activity-day.has-article').forEach(day => {
         if (day.dataset.url) {
             day.addEventListener('click', () => {
                 window.location.href = day.dataset.url;
             });
         }
+        
+        day.addEventListener('mouseenter', (e) => {
+            const rect = day.getBoundingClientRect();
+            activityTooltip.textContent = day.dataset.title;
+            activityTooltip.style.opacity = '1';
+            activityTooltip.style.visibility = 'visible';
+            
+            // Position above the element, centered
+            const tooltipRect = activityTooltip.getBoundingClientRect();
+            let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+            let top = rect.top - tooltipRect.height - 8;
+            
+            // Keep within viewport
+            if (left < 8) left = 8;
+            if (left + tooltipRect.width > window.innerWidth - 8) left = window.innerWidth - tooltipRect.width - 8;
+            if (top < 8) top = rect.bottom + 8; // Show below if no room above
+            
+            activityTooltip.style.left = left + 'px';
+            activityTooltip.style.top = top + 'px';
+        });
+        
+        day.addEventListener('mouseleave', () => {
+            activityTooltip.style.opacity = '0';
+            activityTooltip.style.visibility = 'hidden';
+        });
     });
 
     // ARTICLE FILTERING LOGIC

@@ -21,8 +21,23 @@
         </div>
         
         <div class="activity-graph">
-            <div class="activity-months" id="activity-months">
+            <div class="activity-months" id="activity-months" data-default="year" style="display: none;">
                 <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
+            <div class="activity-months" id="activity-months-recent" data-default="recent">
+                {{ $now := now }}
+                <span>{{ ($now.AddDate 0 -11 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -10 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -9 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -8 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -7 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -6 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -5 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -4 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -3 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -2 0).Format "Jan" }}</span>
+                <span>{{ ($now.AddDate 0 -1 0).Format "Jan" }}</span>
+                <span>{{ $now.Format "Jan" }}</span>
             </div>
             
             {{/* Build article date map */}}
@@ -41,10 +56,42 @@
                 {{ end }}
             {{ end }}
             
+            {{/* Generate a "recent" grid showing last 12 months */}}
+            {{ $now := now }}
+            {{ $recentStartDate := $now.AddDate 0 -11 0 }}
+            {{ $recentStartDate = time (printf "%s-01" ($recentStartDate.Format "2006-01")) }}
+            <div class="activity-grid" id="activity-grid-recent" data-year="recent">
+                {{ $startWeekday := int $recentStartDate.Weekday }}
+                {{ $totalDaysInPeriod := int (div (sub $now.Unix $recentStartDate.Unix) 86400) }}
+                {{ $totalDaysInPeriod = add $totalDaysInPeriod 1 }}
+                
+                {{/* Generate all 53 weeks */}}
+                {{ range $week := seq 0 52 }}
+                    <div class="activity-week">
+                        {{ range $day := seq 0 6 }}
+                            {{ $totalDays := add (mul $week 7) $day }}
+                            {{ $dayOffset := sub $totalDays $startWeekday }}
+                            {{ if and (ge $dayOffset 0) (lt $dayOffset $totalDaysInPeriod) }}
+                                {{ $date := $recentStartDate.AddDate 0 0 (int $dayOffset) }}
+                                {{ $dateKey := $date.Format "2006-01-02" }}
+                                {{ $hasArticle := isset $articleDates $dateKey }}
+                                {{ $article := index $articleDates $dateKey }}
+                                <div class="activity-day {{ if $hasArticle }}has-article{{ end }}" 
+                                     data-date="{{ $dateKey }}"
+                                     data-year="{{ $date.Format "2006" }}"
+                                     {{ if $hasArticle }}data-title="{{ $date.Format "Jan 2" }} · {{ $article.title }}" data-url="{{ $article.url }}"{{ end }}>
+                                </div>
+                            {{ else }}
+                                <div class="activity-day empty"></div>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                {{ end }}
+            </div>
+            
             {{/* Generate a grid for each year */}}
-            {{ $currentYear := now.Format "2006" }}
             {{ range $year := $allYears }}
-            <div class="activity-grid{{ if ne $year $currentYear }} hidden{{ end }}" id="activity-grid-{{ $year }}" data-year="{{ $year }}">
+            <div class="activity-grid hidden" id="activity-grid-{{ $year }}" data-year="{{ $year }}">
                 {{ $startDate := time (printf "%s-01-01" $year) }}
                 {{ $startWeekday := int $startDate.Weekday }}
                 {{ $isLeapYear := (time (printf "%s-12-31" $year)).YearDay }}
@@ -63,8 +110,7 @@
                                 <div class="activity-day {{ if $hasArticle }}has-article{{ end }}" 
                                      data-date="{{ $dateKey }}"
                                      data-year="{{ $date.Format "2006" }}"
-                                     {{ if $hasArticle }}data-title="{{ $article.title }}" data-url="{{ $article.url }}"{{ end }}
-                                     title="{{ $date.Format "Jan 2, 2006" }}{{ if $hasArticle }}: {{ $article.title }}{{ end }}">
+                                     {{ if $hasArticle }}data-title="{{ $date.Format "Jan 2" }} · {{ $article.title }}" data-url="{{ $article.url }}"{{ end }}>
                                 </div>
                             {{ else }}
                                 <div class="activity-day empty"></div>

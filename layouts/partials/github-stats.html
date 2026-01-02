@@ -1,0 +1,537 @@
+<section id="github-stats" class="github-stats-section" style="display: none;">
+    <div class="section-header">
+        <h2>Coding Experience</h2>
+        <p class="section-subtitle">Languages & contributions across open source projects</p>
+        <div class="stats-flags" id="stats-flags">
+            <span class="stat-flag"><span id="stat-repos">-</span> Public Repos</span>
+            <span class="stat-flag"><span id="stat-stars">-</span> Stars</span>
+        </div>
+    </div>
+    
+    <div class="github-stats-container">
+        <div class="stats-grid">
+            <!-- Language Distribution -->
+            <div class="stat-card language-card">
+                <h3>Languages</h3>
+                <div class="language-bars" id="language-bars">
+                    <div class="loading-placeholder">Loading...</div>
+                </div>
+            </div>
+            
+            <!-- Top Repos by Stars -->
+            <div class="stat-card numbers-card">
+                <h3>Top Repositories</h3>
+                <div class="star-distribution" id="star-distribution">
+                    <div class="loading-placeholder">Loading...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contribution Activity (Recent commits heatmap style) -->
+        <div class="recent-activity-card">
+            <h3>Recent Activity</h3>
+            <div class="recent-repos" id="recent-repos">
+                <div class="loading-placeholder">Loading...</div>
+            </div>
+        </div>
+        
+        <!-- Organizations Contributed To -->
+        <div class="orgs-card" id="orgs-card" style="display: none;">
+            <h3>Organizations</h3>
+            <p class="orgs-subtitle">Open source projects I've contributed to</p>
+            <div class="orgs-list" id="orgs-list">
+                <div class="loading-placeholder">Loading...</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function() {
+    const GITHUB_USERNAME = 'aymenfurter';
+    const CACHE_KEY = 'github_stats_cache_v2';
+    const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+    const section = document.getElementById('github-stats');
+    
+    // Additional repos I maintain in other orgs
+    const MAINTAINED_REPOS = [
+        'Azure-Samples/voicelive-api-salescoach',
+        'microsoft/custom-monaco-copilot-demo',
+        'microsoft/agents-humanoversight'
+    ];
+    
+    // Known organizations contributed to (since events API only goes back 90 days)
+    const KNOWN_ORGS = [
+        'Azure-Samples',
+        'microsoft',
+        'Azure',
+        'langchain-ai'
+    ];
+    
+    // Organizations to hide
+    const HIDDEN_ORGS = ['i3', 'qxsch'];
+    
+    // Languages to exclude (not real programming languages)
+    const EXCLUDED_LANGUAGES = ['HTML', 'CSS', 'SCSS', 'Markdown'];
+    
+    // Language colors (GitHub's official colors)
+    const languageColors = {
+        'JavaScript': '#f1e05a',
+        'TypeScript': '#3178c6',
+        'Python': '#3572A5',
+        'Java': '#b07219',
+        'Go': '#00ADD8',
+        'Rust': '#dea584',
+        'C#': '#178600',
+        'C++': '#f34b7d',
+        'C': '#555555',
+        'Shell': '#89e051',
+        'Vue': '#41b883',
+        'Ruby': '#701516',
+        'PHP': '#4F5D95',
+        'Swift': '#F05138',
+        'Kotlin': '#A97BFF',
+        'Jupyter Notebook': '#DA5B0B',
+        'HCL': '#844FBA',
+        'Bicep': '#519aba',
+        'Dockerfile': '#384d54',
+        'Makefile': '#427819',
+        'PowerShell': '#012456'
+    };
+    
+    // Check cache
+    function getCache() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_DURATION) {
+                    console.log('Using cached GitHub data');
+                    return data;
+                }
+            }
+        } catch (e) {
+            console.log('Cache read error:', e);
+        }
+        return null;
+    }
+    
+    function setCache(data) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                data,
+                timestamp: Date.now()
+            }));
+        } catch (e) {
+            console.log('Cache write error:', e);
+        }
+    }
+    
+    // Fetch all pages of repos
+    async function fetchAllRepos() {
+        let allRepos = [];
+        let page = 1;
+        const perPage = 100;
+        
+        while (true) {
+            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=${perPage}&page=${page}&sort=pushed`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch repos');
+            }
+            
+            // Check rate limit on first request
+            if (page === 1) {
+                const remaining = response.headers.get('X-RateLimit-Remaining');
+                if (remaining && parseInt(remaining) < 10) {
+                    console.log('GitHub API rate limit low');
+                    return null;
+                }
+            }
+            
+            const repos = await response.json();
+            allRepos = allRepos.concat(repos);
+            
+            // If we got fewer than perPage, we've reached the end
+            if (repos.length < perPage) {
+                break;
+            }
+            page++;
+        }
+        
+        return allRepos;
+    }
+    
+    async function fetchGitHubData() {
+        // Check cache first
+        const cached = getCache();
+        if (cached) {
+            return cached;
+        }
+        
+        try {
+            // Fetch ALL repos with pagination
+            const repos = await fetchAllRepos();
+            if (!repos) return null;
+            
+            // Fetch maintained repos from other orgs
+            const maintainedRepos = [];
+            for (const repoPath of MAINTAINED_REPOS) {
+                try {
+                    const response = await fetch(`https://api.github.com/repos/${repoPath}`);
+                    if (response.ok) {
+                        const repo = await response.json();
+                        maintainedRepos.push(repo);
+                    }
+                } catch (e) {
+                    console.log(`Could not fetch ${repoPath}:`, e);
+                }
+            }
+            
+            // Combine all repos (avoid duplicates by full_name)
+            const repoMap = new Map();
+            [...repos, ...maintainedRepos].forEach(r => {
+                if (!repoMap.has(r.full_name)) {
+                    repoMap.set(r.full_name, r);
+                }
+            });
+            const allRepos = Array.from(repoMap.values());
+            
+            // Filter out forks for language stats (own repos only)
+            const ownRepos = repos.filter(r => !r.fork);
+            
+            // Calculate total stars from ALL repos
+            const totalStars = allRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
+            
+            // Create star distribution data
+            const starDistribution = allRepos
+                .filter(r => r.stargazers_count > 0)
+                .map(r => ({ name: r.name, stars: r.stargazers_count, url: r.html_url }))
+                .sort((a, b) => b.stars - a.stars)
+                .slice(0, 10);
+            
+            // Aggregate languages from repo metadata (exclude HTML/CSS)
+            const languageBytes = {};
+            [...ownRepos, ...maintainedRepos].forEach(repo => {
+                if (repo.language && !EXCLUDED_LANGUAGES.includes(repo.language)) {
+                    languageBytes[repo.language] = (languageBytes[repo.language] || 0) + (repo.size * 1024);
+                }
+            });
+            
+            // Fetch events for recent activity
+            let recentRepos = [];
+            let eventOrgs = {};
+            
+            try {
+                const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`);
+                if (eventsResponse.ok) {
+                    const events = await eventsResponse.json();
+                    
+                    // Get repos with actual recent push events
+                    const recentPushes = {};
+                    
+                    events.forEach(event => {
+                        const eventDate = new Date(event.created_at);
+                        const repoName = event.repo.name;
+                        const orgName = repoName.split('/')[0];
+                        
+                        // Track recent pushes for activity section
+                        if (event.type === 'PushEvent') {
+                            if (!recentPushes[repoName] || eventDate > recentPushes[repoName].date) {
+                                recentPushes[repoName] = {
+                                    name: repoName.split('/')[1],
+                                    fullName: repoName,
+                                    url: `https://github.com/${repoName}`,
+                                    date: eventDate
+                                };
+                            }
+                        }
+                        
+                        // Track org contributions from events
+                        if (['PushEvent', 'PullRequestEvent', 'IssuesEvent', 'IssueCommentEvent', 'CreateEvent'].includes(event.type)) {
+                            if (orgName.toLowerCase() !== GITHUB_USERNAME.toLowerCase() && 
+                                !HIDDEN_ORGS.map(o => o.toLowerCase()).includes(orgName.toLowerCase())) {
+                                if (!eventOrgs[orgName]) {
+                                    eventOrgs[orgName] = { name: orgName, repos: new Set() };
+                                }
+                                eventOrgs[orgName].repos.add(repoName);
+                            }
+                        }
+                    });
+                    
+                    // Get recent repos with their metadata
+                    const recentRepoNames = Object.values(recentPushes)
+                        .sort((a, b) => b.date - a.date)
+                        .slice(0, 5);
+                    
+                    // Match with repo data for language/stars info
+                    recentRepos = recentRepoNames.map(recent => {
+                        const repoData = allRepos.find(r => 
+                            r.full_name === recent.fullName || r.name === recent.name
+                        );
+                        return {
+                            name: recent.name,
+                            url: recent.url,
+                            language: repoData?.language || null,
+                            stars: repoData?.stargazers_count || 0,
+                            updatedAt: recent.date,
+                            description: repoData?.description || null
+                        };
+                    });
+                }
+            } catch (e) {
+                console.log('Could not fetch events:', e);
+                // Fallback to repo pushed_at dates
+                recentRepos = ownRepos
+                    .slice(0, 5)
+                    .map(r => ({
+                        name: r.name,
+                        url: r.html_url,
+                        language: r.language,
+                        stars: r.stargazers_count,
+                        updatedAt: new Date(r.pushed_at),
+                        description: r.description
+                    }));
+            }
+            
+            // Search for contributions to known orgs using search API
+            let orgs = [];
+            try {
+                // Use search API to find PRs by user
+                const searchResponse = await fetch(`https://api.github.com/search/issues?q=author:${GITHUB_USERNAME}+type:pr+is:merged&per_page=100`);
+                if (searchResponse.ok) {
+                    const searchData = await searchResponse.json();
+                    const prOrgs = {};
+                    
+                    searchData.items.forEach(item => {
+                        // Extract org from repository_url
+                        const urlParts = item.repository_url.split('/');
+                        const orgName = urlParts[urlParts.length - 2];
+                        
+                        if (orgName.toLowerCase() !== GITHUB_USERNAME.toLowerCase() && 
+                            !HIDDEN_ORGS.map(o => o.toLowerCase()).includes(orgName.toLowerCase())) {
+                            if (!prOrgs[orgName]) {
+                                prOrgs[orgName] = { name: orgName, repos: new Set() };
+                            }
+                            prOrgs[orgName].repos.add(item.repository_url.split('/').slice(-2).join('/'));
+                        }
+                    });
+                    
+                    // Merge event orgs with PR orgs
+                    Object.entries(eventOrgs).forEach(([name, data]) => {
+                        if (!prOrgs[name]) {
+                            prOrgs[name] = data;
+                        } else {
+                            data.repos.forEach(r => prOrgs[name].repos.add(r));
+                        }
+                    });
+                    
+                    // Also add known orgs that might not appear in search
+                    KNOWN_ORGS.forEach(orgName => {
+                        if (!prOrgs[orgName] && !HIDDEN_ORGS.map(o => o.toLowerCase()).includes(orgName.toLowerCase())) {
+                            // Check if user has any repos in maintained repos from this org
+                            const hasContribution = MAINTAINED_REPOS.some(r => r.startsWith(orgName + '/'));
+                            if (hasContribution) {
+                                prOrgs[orgName] = { 
+                                    name: orgName, 
+                                    repos: new Set(MAINTAINED_REPOS.filter(r => r.startsWith(orgName + '/')))
+                                };
+                            }
+                        }
+                    });
+                    
+                    orgs = Object.values(prOrgs)
+                        .map(o => ({ ...o, repos: Array.from(o.repos) }))
+                        .sort((a, b) => b.repos.length - a.repos.length)
+                        .slice(0, 8);
+                }
+            } catch (e) {
+                console.log('Could not fetch PRs:', e);
+                // Fallback to event orgs only
+                orgs = Object.values(eventOrgs)
+                    .map(o => ({ ...o, repos: Array.from(o.repos) }))
+                    .sort((a, b) => b.repos.length - a.repos.length)
+                    .slice(0, 6);
+            }
+            
+            const result = {
+                repoCount: repos.length,
+                totalStars,
+                starDistribution,
+                languages: languageBytes,
+                recentRepos,
+                orgs
+            };
+            
+            // Cache the result
+            setCache(result);
+            
+            return result;
+        } catch (error) {
+            console.error('GitHub API error:', error);
+            return null;
+        }
+    }
+    
+    function renderLanguages(languages) {
+        const container = document.getElementById('language-bars');
+        if (!languages || Object.keys(languages).length === 0) {
+            container.innerHTML = '<p class="no-data">No language data available</p>';
+            return;
+        }
+        
+        // Sort by bytes and get top languages
+        const sorted = Object.entries(languages)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 8);
+        
+        const total = sorted.reduce((sum, [_, bytes]) => sum + bytes, 0);
+        
+        // Create stacked bar
+        const stackedBar = document.createElement('div');
+        stackedBar.className = 'stacked-bar';
+        
+        sorted.forEach(([lang, bytes]) => {
+            const percent = (bytes / total * 100).toFixed(1);
+            const segment = document.createElement('div');
+            segment.className = 'bar-segment';
+            segment.style.width = percent + '%';
+            segment.style.backgroundColor = languageColors[lang] || '#8b949e';
+            segment.title = `${lang}: ${percent}%`;
+            stackedBar.appendChild(segment);
+        });
+        
+        // Create legend
+        const legend = document.createElement('div');
+        legend.className = 'language-legend';
+        
+        sorted.forEach(([lang, bytes]) => {
+            const percent = (bytes / total * 100).toFixed(1);
+            const item = document.createElement('div');
+            item.className = 'legend-item';
+            item.innerHTML = `
+                <span class="legend-color" style="background: ${languageColors[lang] || '#8b949e'}"></span>
+                <span class="legend-name">${lang}</span>
+                <span class="legend-percent">${percent}%</span>
+            `;
+            legend.appendChild(item);
+        });
+        
+        container.innerHTML = '';
+        container.appendChild(stackedBar);
+        container.appendChild(legend);
+    }
+    
+    function renderStats(data) {
+        document.getElementById('stat-repos').textContent = data.repoCount;
+        document.getElementById('stat-stars').textContent = data.totalStars.toLocaleString();
+        
+        // Render star distribution
+        const container = document.getElementById('star-distribution');
+        if (!data.starDistribution || data.starDistribution.length === 0) {
+            container.innerHTML = '<p class="no-data">No starred repos</p>';
+            return;
+        }
+        
+        const maxStars = data.starDistribution[0].stars;
+        
+        const html = `
+            <div class="star-dist-bars">
+                ${data.starDistribution.slice(0, 6).map(repo => `
+                    <a href="${repo.url}" target="_blank" rel="noopener" class="star-dist-item" title="${repo.name}: ${repo.stars} stars">
+                        <span class="star-dist-name">${repo.name.length > 18 ? repo.name.substring(0, 18) + '…' : repo.name}</span>
+                        <div class="star-dist-bar-wrapper">
+                            <div class="star-dist-bar" style="width: ${(repo.stars / maxStars * 100).toFixed(1)}%"></div>
+                        </div>
+                        <span class="star-dist-count">★ ${repo.stars}</span>
+                    </a>
+                `).join('')}
+            </div>
+        `;
+        
+        container.innerHTML = html;
+    }
+    
+    function renderRecentRepos(repos) {
+        const container = document.getElementById('recent-repos');
+        if (!repos || repos.length === 0) {
+            container.innerHTML = '<p class="no-data">No recent activity</p>';
+            return;
+        }
+        
+        const html = repos.map(repo => {
+            const timeAgo = getTimeAgo(repo.updatedAt);
+            const langColor = languageColors[repo.language] || '#8b949e';
+            return `
+                <a href="${repo.url}" target="_blank" rel="noopener" class="recent-repo-item">
+                    <div class="repo-info">
+                        <span class="repo-name">${repo.name}</span>
+                        ${repo.description ? `<span class="repo-desc">${repo.description.substring(0, 60)}${repo.description.length > 60 ? '...' : ''}</span>` : ''}
+                    </div>
+                    <div class="repo-meta">
+                        ${repo.language ? `<span class="repo-lang"><span class="lang-dot" style="background: ${langColor}"></span>${repo.language}</span>` : ''}
+                        ${repo.stars > 0 ? `<span class="repo-stars">★ ${repo.stars}</span>` : ''}
+                        <span class="repo-time">${timeAgo}</span>
+                    </div>
+                </a>
+            `;
+        }).join('');
+        
+        container.innerHTML = html;
+    }
+    
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        const intervals = [
+            { label: 'y', seconds: 31536000 },
+            { label: 'mo', seconds: 2592000 },
+            { label: 'd', seconds: 86400 },
+            { label: 'h', seconds: 3600 },
+            { label: 'm', seconds: 60 }
+        ];
+        
+        for (const interval of intervals) {
+            const count = Math.floor(seconds / interval.seconds);
+            if (count >= 1) {
+                return `${count}${interval.label} ago`;
+            }
+        }
+        return 'just now';
+    }
+    
+    function renderOrgs(orgs) {
+        const container = document.getElementById('orgs-list');
+        const card = document.getElementById('orgs-card');
+        
+        if (!orgs || orgs.length === 0) {
+            card.style.display = 'none';
+            return;
+        }
+        
+        card.style.display = 'block';
+        
+        const html = orgs.map(org => `
+            <a href="https://github.com/${org.name}" target="_blank" rel="noopener" class="org-item">
+                <img src="https://github.com/${org.name}.png?size=40" alt="${org.name}" class="org-avatar" onerror="this.style.display='none'">
+                <div class="org-info">
+                    <span class="org-name">${org.name}</span>
+                    <span class="org-repos">${org.repos.length} repo${org.repos.length > 1 ? 's' : ''}</span>
+                </div>
+            </a>
+        `).join('');
+        
+        container.innerHTML = html;
+    }
+    
+    // Initialize
+    fetchGitHubData().then(data => {
+        if (data) {
+            section.style.display = 'block';
+            renderLanguages(data.languages);
+            renderStats(data);
+            renderRecentRepos(data.recentRepos);
+            renderOrgs(data.orgs);
+        }
+    });
+})();
+</script>

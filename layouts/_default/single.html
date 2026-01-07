@@ -13,6 +13,8 @@
             {{ .Content }}
         </div>
 
+        {{ partial "author-bio.html" . }}
+
         <footer class="article-footer">
             {{ if .Params.tags }}
             <div class="article-tags">

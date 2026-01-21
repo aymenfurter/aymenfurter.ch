@@ -1069,3 +1069,101 @@ footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; hei
     header, footer, nav, .article-navigation, .article-actions, .filter-bar { display: none !important; }
     .article-content { padding: 0; }
 }
+
+/* AI Mode Styles */
+#ai-mode-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    display: none;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+body.ai-mode #ai-mode-canvas {
+    display: block;
+}
+
+body.ai-mode {
+    --text-color: #b3bfcc;
+    --heading-color: #e0e6ed;
+    --accent-color: #8892b0; /* Muted cool grey/blue */
+    --accent-color-rgb: 136, 146, 176;
+    --background-color: #0a0a0f;
+    --secondary-color: #111116;
+    --card-background: rgba(10, 10, 15, 0.85); 
+    --hover-color: #1a1a20;
+    
+    background-color: var(--background-color) !important;
+    font-family: 'Fira Code', monospace;
+    letter-spacing: -0.5px;
+}
+
+body.ai-mode * {
+    font-family: 'Fira Code', monospace !important;
+    border-radius: 0 !important; /* Techy sharp edges */
+}
+
+body.ai-mode h1, body.ai-mode h2, body.ai-mode h3, body.ai-mode h4, body.ai-mode h5, body.ai-mode h6 {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+body.ai-mode img {
+    filter: grayscale(100%) contrast(1.2) brightness(0.7) sepia(20%) hue-rotate(180deg);
+    opacity: 0.8;
+}
+
+body.ai-mode .hero-image::after {
+    border-color: var(--accent-color);
+    border-style: dashed;
+    border-width: 1px;
+}
+
+body.ai-mode header {
+    background: rgba(10, 10, 15, 0.95);
+    border-bottom: 1px dashed rgba(136, 146, 176, 0.3);
+}
+
+body.ai-mode .project-item, 
+body.ai-mode .article-item, 
+body.ai-mode .stat-card, 
+body.ai-mode .writing-item,
+body.ai-mode .activity-graph,
+body.ai-mode .career-timeline,
+body.ai-mode .company-selector-mobile,
+body.ai-mode .experience-detail-panel .experience-detail,
+body.ai-mode .recent-activity-card,
+body.ai-mode .orgs-card {
+    border: 1px solid rgba(136, 146, 176, 0.2);
+    box-shadow: none;
+    background: rgba(10, 10, 15, 0.5);
+}
+
+body.ai-mode .cta-button, 
+body.ai-mode .filter-btn, 
+body.ai-mode .view-all-link,
+body.ai-mode .read-more {
+    border: 1px dashed var(--accent-color);
+    text-transform: uppercase;
+}
+
+body.ai-mode .tech-pill, 
+body.ai-mode .tag-pill, 
+body.ai-mode .article-tag,
+body.ai-mode .stat-flag {
+    border: 1px solid rgba(136, 146, 176, 0.3);
+    background: transparent;
+}
+
+body.ai-mode ::selection {
+    background: rgba(136, 146, 176, 0.3);
+    color: #fff;
+}
+
+/* Hide scrollbar in AI mode for more immersive feel or style it */
+body.ai-mode::-webkit-scrollbar-track { background: #0a0a0f; }
+body.ai-mode::-webkit-scrollbar-thumb { background: #333; border: 1px solid #555; }

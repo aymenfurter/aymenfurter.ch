@@ -7,6 +7,7 @@ weight: 2
 featured: true
 media_type: "gif"
 media_url: "/images/projects/microagents-demo.gif"
+thumbnail_url: "/images/projects/microagents-poster.jpg"
 highlights:
   - "Self-improving agents that create and validate themselves"
   - "Persistent agent storage with learning across sessions"

@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Site.Title }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <script>
+    (function() {
+        const stored = localStorage.getItem('theme');
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        const apply = t => document.documentElement.setAttribute('data-theme', t);
+        apply(stored || (mq.matches ? 'dark' : 'light'));
+        // Follow OS changes unless the user chose manually
+        mq.addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) apply(e.matches ? 'dark' : 'light');
+        });
+        window.__toggleTheme = function() {
+            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', next);
+            apply(next);
+        };
+    })();
+    </script>
 
 </head>
 <body>

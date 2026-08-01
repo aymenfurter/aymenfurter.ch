@@ -49,12 +49,13 @@
 <script>
 (function() {
     const GITHUB_USERNAME = 'aymenfurter';
-    const CACHE_KEY = 'github_stats_cache_v2';
+    const CACHE_KEY = 'github_stats_cache_v4';
     const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
     const section = document.getElementById('github-stats');
     
     // Additional repos I maintain in other orgs
     const MAINTAINED_REPOS = [
+        'microsoft/ai-engineering-coach',
         'Azure-Samples/voicelive-api-salescoach',
         'microsoft/custom-monaco-copilot-demo',
         'microsoft/agents-humanoversight'
@@ -460,7 +461,7 @@
         }
         
         const html = repos.map(repo => {
-            const timeAgo = getTimeAgo(repo.updatedAt);
+            const timeAgo = getTimeAgo(new Date(repo.updatedAt));
             const langColor = languageColors[repo.language] || '#8b949e';
             return `
                 <a href="${repo.url}" target="_blank" rel="noopener" class="recent-repo-item">

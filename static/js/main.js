@@ -305,3 +305,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+// Easter egg: click the hero photo 10 times to launch Age of Agents II
+document.addEventListener('DOMContentLoaded', () => {
+    const photo = document.querySelector('.hero-image img');
+    if (!photo) return;
+    let clicks = 0, timer = null;
+    photo.addEventListener('click', () => {
+        clicks++;
+        clearTimeout(timer);
+        timer = setTimeout(() => { clicks = 0; }, 2500);
+        if (clicks >= 7 && clicks < 10) {
+            photo.style.transform = `rotate(${(clicks - 8) * 2}deg) scale(${1 + (clicks - 6) * 0.01})`;
+        }
+        if (clicks >= 10) {
+            clicks = 0;
+            photo.style.transform = '';
+            if (window.AgentsRTS) { window.AgentsRTS.open(); return; }
+            const s = document.createElement('script');
+            s.src = '/js/agents-game.js';
+            s.onload = () => window.AgentsRTS.open();
+            document.body.appendChild(s);
+        }
+    });
+});

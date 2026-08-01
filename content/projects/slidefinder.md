@@ -7,6 +7,7 @@ weight: 4
 featured: true
 media_type: "gif"
 media_url: "/images/projects/slidefinder-demo.gif"
+thumbnail_url: "/images/projects/slidefinder-poster.jpg"
 highlights:
   - "Semantic search across 10,000+ conference slides with AI-powered retrieval"
   - "Multi-agent architecture (Architect, Critic, Judge) for intelligent deck building"

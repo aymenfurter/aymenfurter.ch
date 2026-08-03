@@ -42,11 +42,11 @@
 
     /* --------------------------------------------------------------- CSS */
     /* Chrome follows the website: cream paper, ink text, terracotta accent,
-       JetBrains Mono for utility, Newsreader for display. */
+       and Arial typography. */
 
     const CSS = `
     #aoa-overlay{position:fixed;inset:0;z-index:99999;background:#141210;color:#33291F;
-        font-family:"JetBrains Mono","IBM Plex Mono",monospace;user-select:none;-webkit-user-select:none}
+        font-family:Arial,sans-serif;user-select:none;-webkit-user-select:none}
     #aoa-overlay *{box-sizing:border-box;margin:0;padding:0}
     #aoa-canvas{position:absolute;inset:0;width:100%;height:100%;cursor:default;image-rendering:pixelated}
     .pxi{width:13px;height:13px;image-rendering:pixelated;vertical-align:-2px}
@@ -61,7 +61,7 @@
     .aoa-res b{font-weight:700;min-width:42px;text-align:right;font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
     .aoa-pop{margin-left:2px}
     .aoa-pop.full b{color:#B75434}
-    .aoa-wordmark{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:19px;letter-spacing:.01em;
+    .aoa-wordmark{font-family:Arial,sans-serif;font-style:italic;font-size:19px;letter-spacing:.01em;
         margin-right:14px;color:#33291F;white-space:nowrap}
     .aoa-spacer{flex:1}
     .aoa-timer{font-size:12px;color:#6E6152;margin-right:10px;padding:6px 12px;border:1px dashed #D9CBB2;
@@ -112,7 +112,7 @@
         background:radial-gradient(ellipse at 50% 35%, #2b2620 0%, #141210 75%)}
     .aoa-panel{max-width:720px;width:92%;text-align:center;padding:44px 44px 34px;background:#FBF6EC;
         border:1px solid #D9CBB2;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:90vh;overflow:auto}
-    .aoa-panel h1{font-family:Newsreader,Georgia,serif;font-style:italic;font-weight:500;font-size:46px;
+    .aoa-panel h1{font-family:Arial,sans-serif;font-style:italic;font-weight:500;font-size:46px;
         letter-spacing:-.01em;color:#33291F;margin-bottom:6px}
     .aoa-panel h2{font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:#B75434;
         margin-bottom:14px}
@@ -127,7 +127,7 @@
     .aoa-lab .sw{width:64px;height:56px;margin:0 auto 12px;image-rendering:pixelated;display:block}
     .aoa-lab .dot{position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:2px;
         border:1px solid rgba(51,41,31,.25)}
-    .aoa-lab b{display:block;font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:500;color:#33291F;margin-bottom:6px}
+    .aoa-lab b{display:block;font-family:Arial,sans-serif;font-size:20px;font-weight:500;color:#33291F;margin-bottom:6px}
     .aoa-lab span{font-size:10px;color:#6E6152;line-height:1.55;display:block;letter-spacing:.02em}
     .aoa-lab .pick{display:inline-block;margin-top:12px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
         color:#B75434}

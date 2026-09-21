@@ -1,0 +1,175 @@
+WEBVTT
+
+00:00.440 --> 00:03.857
+Hi everyone, my name is Iman. Today I want to give you a
+
+00:03.857 --> 00:07.455
+demo of Thursday prototype of an agent that you can control
+
+00:07.455 --> 00:10.633
+just through your voice and that you can use to both
+
+00:10.633 --> 00:13.571
+control your operating system as well as writing
+
+00:13.571 --> 00:17.420
+applications. Thursday, are you with us?
+
+00:17.420 --> 00:20.445
+Yeah, come here ready to help with whatever is on your
+
+00:20.445 --> 00:21.860
+screen.
+
+00:21.860 --> 00:27.210
+Now I would really like you to bring up the Calculator app.
+
+00:27.210 --> 00:29.220
+On it.
+
+00:29.220 --> 00:34.530
+Now calculator is open. Please calculate 5 + 5.
+
+00:35.070 --> 00:37.850
+One SEC.
+
+00:47.480 --> 00:49.770
+5 + 5 is 10.
+
+00:49.770 --> 00:52.223
+Thank you for confirming this. Can you switch back to
+
+00:52.223 --> 00:54.720
+Safari please?
+
+00:54.720 --> 00:56.930
+Switching back now.
+
+00:56.930 --> 01:00.547
+So you can see that you can see that the agent is able to
+
+01:00.547 --> 01:04.288
+control the operating system. It actually cascades down the
+
+01:04.288 --> 01:07.594
+commands. There is a fast session and then that fast
+
+01:07.594 --> 01:11.211
+session is built using GPD 5.6 Lunar. So it's really fast
+
+01:11.211 --> 01:14.890
+for like single commands that you just saw. And then there
+
+01:14.890 --> 01:18.507
+is a deep session that you can use for more complex tasks
+
+01:18.507 --> 01:22.062
+that will run in the background. And the real time model
+
+01:22.062 --> 01:25.555
+will actually be notified whenever there is a new event
+
+01:25.555 --> 01:26.900
+from both sessions.
+
+01:26.900 --> 01:30.592
+So can you quickly build an open street map? Demo
+
+01:30.592 --> 01:34.802
+application can be done in a single file of the top five
+
+01:34.802 --> 01:38.840
+points of interest on Crete.
+
+01:38.840 --> 01:42.830
+Sure, I'll put that together.
+
+01:42.840 --> 01:45.422
+Now while this is building that single file demo in the
+
+01:45.422 --> 01:46.780
+background.
+
+01:46.780 --> 01:51.760
+All right, writing the HTML file now.
+
+01:55.740 --> 01:58.463
+Now, while this is building, can you bring up tomorrow's
+
+01:58.463 --> 02:01.460
+weather in a new window?
+
+02:01.460 --> 02:03.440
+Sure, checking.
+
+02:03.440 --> 02:06.570
+OK, tomorrow's Weather for Crete is open in a new Safari
+
+02:06.570 --> 02:07.610
+tab.
+
+02:07.610 --> 02:10.530
+Please switch to it.
+
+02:10.710 --> 02:13.490
+Switching now.
+
+02:14.440 --> 02:18.223
+Alright, I'm on the weather tab and the demo file is still
+
+02:18.223 --> 02:20.330
+getting put together.
+
+02:20.330 --> 02:23.265
+Ah, I see you've opened it. Amazing. Can you give me a
+
+02:23.265 --> 02:26.630
+quick walk through how this works?
+
+02:26.630 --> 02:30.576
+Yeah, totally. The page shows an interactive open street
+
+02:30.576 --> 02:34.661
+map centered on Create. Let me just make this a bit easier
+
+02:34.661 --> 02:38.539
+to see. Hmm. OK, there we go. It's a simple Leaflet map
+
+02:38.539 --> 02:42.693
+with markers. Each marker is one of the top five spots, and
+
+02:42.693 --> 02:46.294
+you can Click to see a little more about each. It's
+
+02:46.294 --> 02:49.610
+updating right now.
+
+02:51.640 --> 02:55.040
+Give me a second.
+
+02:55.860 --> 02:59.490
+OK, it's ready. The Create Explorer page shows 5 must see
+
+02:59.490 --> 03:03.247
+spots on an interactive map. Click on marker to see a short
+
+03:03.247 --> 03:06.820
+blurb and tips for visiting.
+
+03:06.820 --> 03:11.650
+Alright, can you bring up point #5 for me?
+
+03:11.660 --> 03:15.140
+Sure. Well, let me pull it up.
+
+03:20.600 --> 03:24.534
+There it is .5 is Spinalonga, A fortified Venetian island
+
+03:24.534 --> 03:28.537
+near Ilunda with layers of history and boat access you can
+
+03:28.537 --> 03:32.335
+check before going. Amazing, Thank you so much for this
+
+03:32.335 --> 03:35.150
+coding work.

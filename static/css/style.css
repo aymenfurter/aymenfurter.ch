@@ -931,6 +931,18 @@ footer > p {
     border-radius: 0;
 }
 
+.article-content video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.article-content figcaption {
+    margin-top: 0.8rem;
+    font-size: 0.9em;
+    color: var(--ink-soft);
+}
+
 .article-content blockquote {
     border-left: 3px solid var(--terracotta);
     padding: 4px 0 4px 22px;

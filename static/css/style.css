@@ -2,7 +2,7 @@
    aymenfurter.ch — "Analog Notebook" redesign
    Warm humanist editorial: cream paper, ink text, terracotta accent,
    torn-paper watercolor dividers, taped index cards, hand-annotated charts.
-   Fonts: Newsreader (display serif) + JetBrains Mono (utility).
+   Typography: Arial throughout.
    ========================================================================== */
 
 /* ---------- Tokens ---------- */
@@ -22,8 +22,8 @@
     --rose: #C2846F;           /* watercolor imagery accent */
     --pill-ink: #FBF6EC;       /* text on taupe/terracotta fills, theme-independent */
     --paper-line: rgba(51, 41, 31, 0.12);
-    --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
-    --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    --serif: Arial, sans-serif;
+    --mono: Arial, sans-serif;
 
     /* aliases used by main.js tooltip */
     --primary-color: var(--cream-2);
